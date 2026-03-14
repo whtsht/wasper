@@ -512,18 +512,10 @@ pub fn step(
         Instr::F32ConvertI64S => stack.cvtop(|v: i64| v as f32),
         Instr::F64ConvertI32S => stack.cvtop(|v: i32| v as f64),
         Instr::F64ConvertI64S => stack.cvtop(|v: i64| v as f64),
-        Instr::I32ReinterpretF32 => {
-            stack.cvtop(|v: f32| unsafe { core::mem::transmute::<f32, i32>(v) })
-        }
-        Instr::I64ReinterpretF64 => {
-            stack.cvtop(|v: f64| unsafe { core::mem::transmute::<f64, i64>(v) })
-        }
-        Instr::F32ReinterpretI32 => {
-            stack.cvtop(|v: i32| unsafe { core::mem::transmute::<i32, f32>(v) })
-        }
-        Instr::F64ReinterpretI64 => {
-            stack.cvtop(|v: i64| unsafe { core::mem::transmute::<i64, f64>(v) })
-        }
+        Instr::I32ReinterpretF32 => stack.cvtop(|v: f32| f32::to_bits(v).cast_signed()),
+        Instr::I64ReinterpretF64 => stack.cvtop(|v: f64| f64::to_bits(v).cast_signed()),
+        Instr::F32ReinterpretI32 => stack.cvtop(|v: i32| f32::from_bits(i32::cast_unsigned(v))),
+        Instr::F64ReinterpretI64 => stack.cvtop(|v: i64| f64::from_bits(i64::cast_unsigned(v))),
         Instr::I32Extend8S => stack.unop(|v: i32| (v as i8) as i32),
         Instr::I32Extend16S => stack.unop(|v: i32| (v as i16) as i32),
         Instr::I64Extend8S => stack.unop(|v: i64| (v as i8) as i64),
