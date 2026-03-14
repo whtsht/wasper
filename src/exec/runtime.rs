@@ -549,7 +549,7 @@ mod tests {
             r#"(module
                   (memory 1)
                   (global $x (mut i32) (i32.const -12))
-                  (table 2 anyfunc)
+                  (table 2 funcref)
                   (func $f1 (result i32) i32.const 42)
                   (func $f2 (result i32) i32.const 13)
                   (elem (i32.const 0) $f1 $f2)
